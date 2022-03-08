@@ -15,7 +15,7 @@ green = (0, 255, 0)
 blue = (50, 153, 213)
 
 #näytömn koo'on muuttujat
-dis_width = 600
+dis_width = 800
 dis_height = 400
 
 #da display
@@ -33,7 +33,7 @@ font_style = pygame.font.SysFont("bahnschrift", 25)
 score_font = pygame.font.SysFont("comicsansms", 35)
 
 
-#fubktio pisteille
+#funktio pisteille
 def Your_score(score):
     value = score_font.render("Pisteesi: " + str(score), True, yellow)
     dis.blit(value, [0, 0])
@@ -67,10 +67,11 @@ def gameLoop():
     foody = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
 
     while not game_over:
-
+        #jos häviää / mato menee reunojen yli niin kyseinen koodi pyörii
         while game_close == True:
             dis.fill(blue)
-            message("Hävisit Belin! paina Q näppäintä lopettaaksesi tai paina C näppäintä pelataksesi uudestaan", red)
+            message("Hävisit Belin! paina Q näppäintä lopettaaksesi", red)
+        
             pygame.display.update()
 
             for event in pygame.event.get():
@@ -78,9 +79,9 @@ def gameLoop():
                     if event.key == pygame.K_q:
                         game_over = True
                         game_close = False
-                    if event.key == pygame.K_c:
-                        gameLoop()
 
+
+        #näppäimet (nuoli)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_over = True
@@ -99,12 +100,15 @@ def gameLoop():
                     x1_change = 0
     
 
-        if x1 >= dis_width or x1 < 0 or y1 >= dis_height:
-            game_over = True
-
+        #koodi pätkä joka määrittelee rajat ikkunan reunoilla
+        if x1 >= dis_width or x1 < 0 or y1 >= dis_height or y1 < 0:
+            game_close = True
+       
+       
         x1 += x1_change
         y1 += y1_change
 
+        #mato + madon kasvatus
         dis.fill(white)
         pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
         snake_Head = []
